@@ -1,5 +1,7 @@
-﻿using Core.Entities;
+﻿using System;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
 #nullable disable
@@ -18,7 +20,8 @@ namespace Infrastructure
             Configuration = configuration;
         }
 
-        private readonly IConfiguration Configuration;
+        private IConfiguration Configuration;
+
         public virtual DbSet<Agencia> Agencia { get; set; }
         public virtual DbSet<Conta> Conta { get; set; }
         public virtual DbSet<Endereco> Enderecos { get; set; }
@@ -169,6 +172,18 @@ namespace Infrastructure
                 entity.Property(e => e.PessoaId).HasColumnName("pessoa_id");
 
                 entity.Property(e => e.EnderecoId).HasColumnName("endereco_id");
+
+                entity.HasOne(d => d.Endereco)
+                    .WithMany(p => p.PessoaEnderecos)
+                    .HasForeignKey(d => d.EnderecoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_pessoa_endereco_endereco_id");
+
+                entity.HasOne(d => d.Pessoa)
+                    .WithMany(p => p.PessoaEnderecos)
+                    .HasForeignKey(d => d.PessoaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_pessoa_endereco_pessoa_id");
             });
 
             modelBuilder.Entity<PessoaFisica>(entity =>

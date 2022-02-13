@@ -18,18 +18,20 @@ namespace Application.DependencyInjection
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
             services.AddScoped<ILoginDb, LoginDb>();
+            ConfigureRepositories(services);
         }
 
-        public static void ConfigureRepositories(IServiceCollection services)
+        private static void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddScoped<IRepository<Conta>, RepositoryBase<Conta>>();
-            services.AddScoped<IRepository<Agencia>, RepositoryBase<Agencia>>();
-            services.AddScoped<IRepository<Endereco>, RepositoryBase<Endereco>>();
-            services.AddScoped<IRepository<Pessoa>, RepositoryBase<Pessoa>>();
-            services.AddScoped<IRepository<PessoaEndereco>, RepositoryBase<PessoaEndereco>>();
-            services.AddScoped<IRepository<PessoaFisica>, RepositoryBase<PessoaFisica>>();
-            services.AddScoped<IRepository<PessoaJuridica>, RepositoryBase<PessoaJuridica>>();
-            services.AddScoped<IRepository<Usuario>, RepositoryBase<Usuario>>();
+            // services.AddScoped<IRepository<Conta>, RepositoryBase<Conta>>();
+            services.AddScoped<IContaRepository, ContaRepository>();
+            // services.AddScoped<IRepository<Agencia>, RepositoryBase<Agencia>>();
+            // services.AddScoped<IRepository<Endereco>, RepositoryBase<Endereco>>();
+            // services.AddScoped<IRepository<Pessoa>, RepositoryBase<Pessoa>>();
+            // services.AddScoped<IRepository<PessoaEndereco>, RepositoryBase<PessoaEndereco>>();
+            // services.AddScoped<IRepository<PessoaFisica>, RepositoryBase<PessoaFisica>>();
+            // services.AddScoped<IRepository<PessoaJuridica>, RepositoryBase<PessoaJuridica>>();
+            // services.AddScoped<IRepository<Usuario>, RepositoryBase<Usuario>>();
         }
     }
 }
