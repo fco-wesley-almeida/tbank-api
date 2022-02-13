@@ -1,0 +1,4 @@
+Application/appsettings.*
+.idea
+*/bin/*
+*/obj/*
