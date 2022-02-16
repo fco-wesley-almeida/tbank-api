@@ -10,6 +10,7 @@ namespace Infrastructure
 {
     public partial class TBankDbContext : DbContext
     {
+        private readonly IConfiguration Configuration;
         public TBankDbContext()
         {
         }
@@ -20,15 +21,20 @@ namespace Infrastructure
             Configuration = configuration;
         }
 
-        private IConfiguration Configuration;
-
         public virtual DbSet<Agencia> Agencia { get; set; }
+        public virtual DbSet<ContasSaldoMatView> ContasSaldoMatViews { get; set; }
         public virtual DbSet<Conta> Conta { get; set; }
         public virtual DbSet<Endereco> Enderecos { get; set; }
+        public virtual DbSet<Fatura> Faturas { get; set; }
+        public virtual DbSet<PagamentoFatura> PagamentoFaturas { get; set; }
         public virtual DbSet<Pessoa> Pessoas { get; set; }
         public virtual DbSet<PessoaEndereco> PessoaEnderecos { get; set; }
         public virtual DbSet<PessoaFisica> PessoaFisicas { get; set; }
         public virtual DbSet<PessoaJuridica> PessoaJuridicas { get; set; }
+        public virtual DbSet<Transacao> Transacaos { get; set; }
+        public virtual DbSet<TransacaoCredito> TransacaoCreditos { get; set; }
+        public virtual DbSet<TransacaoDebito> TransacaoDebitos { get; set; }
+        public virtual DbSet<TransacaoReceita> TransacaoReceita { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -48,13 +54,30 @@ namespace Infrastructure
                 entity.HasIndex(e => e.Codigo, "uk_agencia_codigo")
                     .IsUnique();
 
-                entity.Property(e => e.Digito).HasColumnName("digito");
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codigo)
                     .HasMaxLength(10)
                     .HasColumnName("codigo");
+
+                entity.Property(e => e.Digito).HasColumnName("digito");
+            });
+
+            modelBuilder.Entity<ContasSaldoMatView>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("contas_saldo_mat_view");
+
+                entity.Property(e => e.ContaCodigo)
+                    .HasMaxLength(20)
+                    .HasColumnName("conta_codigo");
+
+                entity.Property(e => e.ContaId).HasColumnName("conta_id");
+
+                entity.Property(e => e.Saldo)
+                    .HasColumnType("money")
+                    .HasColumnName("saldo");
             });
 
             modelBuilder.Entity<Conta>(entity =>
@@ -76,6 +99,10 @@ namespace Infrastructure
                     .HasColumnName("data_cadastro");
 
                 entity.Property(e => e.Digito).HasColumnName("digito");
+
+                entity.Property(e => e.LimiteDisponivel)
+                    .HasColumnType("money")
+                    .HasColumnName("limite_disponivel");
 
                 entity.Property(e => e.PessoaId).HasColumnName("pessoa_id");
 
@@ -132,6 +159,56 @@ namespace Infrastructure
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("referencias");
+            });
+
+            modelBuilder.Entity<Fatura>(entity =>
+            {
+                entity.ToTable("fatura");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ContaId).HasColumnName("conta_id");
+
+                entity.Property(e => e.DataVencimento)
+                    .HasColumnType("date")
+                    .HasColumnName("data_vencimento");
+
+                entity.Property(e => e.Mes).HasColumnName("mes");
+
+                entity.Property(e => e.Pago).HasColumnName("pago");
+
+                entity.Property(e => e.Valor)
+                    .HasColumnType("money")
+                    .HasColumnName("valor");
+
+                entity.HasOne(d => d.Conta)
+                    .WithMany(p => p.Faturas)
+                    .HasForeignKey(d => d.ContaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_fatura_conta_id");
+            });
+
+            modelBuilder.Entity<PagamentoFatura>(entity =>
+            {
+                entity.ToTable("pagamento_fatura");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.FaturaId).HasColumnName("fatura_id");
+
+                entity.Property(e => e.TransacaoId).HasColumnName("transacao_id");
+
+                entity.HasOne(d => d.Fatura)
+                    .WithMany(p => p.PagamentoFaturas)
+                    .HasForeignKey(d => d.FaturaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_pagamento_fatura_fatura_id");
+
+                entity.HasOne(d => d.Transacao)
+                    .WithMany(p => p.PagamentoFaturas)
+                    .HasForeignKey(d => d.TransacaoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_pagamento_fatura_transacao_id");
             });
 
             modelBuilder.Entity<Pessoa>(entity =>
@@ -258,6 +335,89 @@ namespace Infrastructure
                     .HasForeignKey<PessoaJuridica>(d => d.PessoaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_pessoa_juridica_pessoa_id");
+            });
+
+            modelBuilder.Entity<Transacao>(entity =>
+            {
+                entity.ToTable("transacao");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Codigo)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("codigo");
+
+                entity.Property(e => e.ContaId).HasColumnName("conta_id");
+
+                entity.Property(e => e.Data)
+                    .HasColumnType("date")
+                    .HasColumnName("data");
+
+                entity.Property(e => e.Descricao)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("descricao")
+                    .HasDefaultValueSql("''::character varying");
+
+                entity.Property(e => e.Time)
+                    .HasColumnType("time without time zone")
+                    .HasColumnName("time");
+
+                entity.Property(e => e.Valor)
+                    .HasColumnType("money")
+                    .HasColumnName("valor");
+
+                entity.HasOne(d => d.Conta)
+                    .WithMany(p => p.Transacaos)
+                    .HasForeignKey(d => d.ContaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_transacao_conta_id");
+            });
+
+            modelBuilder.Entity<TransacaoCredito>(entity =>
+            {
+                entity.ToTable("transacao_credito");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.TransacaoId).HasColumnName("transacao_id");
+
+                entity.HasOne(d => d.Transacao)
+                    .WithMany(p => p.TransacaoCreditos)
+                    .HasForeignKey(d => d.TransacaoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_transacao_credito_transacao_id");
+            });
+
+            modelBuilder.Entity<TransacaoDebito>(entity =>
+            {
+                entity.ToTable("transacao_debito");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.TransacaoId).HasColumnName("transacao_id");
+
+                entity.HasOne(d => d.Transacao)
+                    .WithMany(p => p.TransacaoDebitos)
+                    .HasForeignKey(d => d.TransacaoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_transacao_debito_transacao_id");
+            });
+
+            modelBuilder.Entity<TransacaoReceita>(entity =>
+            {
+                entity.ToTable("transacao_receita");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.TransacaoId).HasColumnName("transacao_id");
+
+                entity.HasOne(d => d.Transacao)
+                    .WithMany(p => p.TransacaoReceita)
+                    .HasForeignKey(d => d.TransacaoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_transacao_receita_transacao_id");
             });
 
             modelBuilder.Entity<Usuario>(entity =>
