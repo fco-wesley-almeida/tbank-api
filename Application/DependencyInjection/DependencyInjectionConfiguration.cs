@@ -1,6 +1,8 @@
+using Business.CoreServices;
 using Business.Services.Autenticacao;
 using Business.Services.Contas;
 using Business.Validators;
+using Core.CoreServices;
 using Core.Data;
 using Core.Domains.Autenticacao.Services;
 using Core.Domains.Contas.Dtos;
@@ -19,6 +21,7 @@ namespace Application.DependencyInjection
         public static void RegisterService(IServiceCollection services)
         {
             ConfigureRepositories(services);
+            services.AddScoped<IPasswordEncoder, PasswordEncoder>();
             services.AddScoped<IContaCodigoDb, ContaCodigoDb>();
             services.AddScoped<ILoginDb, LoginDb>();
             services.AddTransient<IValidator<ContaPessoaFisicaCadastroDto>, ContaPessoaFisicaCadastroValidator>();

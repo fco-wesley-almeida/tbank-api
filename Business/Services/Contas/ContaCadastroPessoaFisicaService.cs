@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Core.CoreServices;
 using Core.Domains.Contas.Dtos;
 using Core.Domains.Contas.Services;
 using Core.Entities;
@@ -19,6 +20,7 @@ namespace Business.Services.Contas
         private readonly IPessoaRepository _pessoaRepository;
         private readonly ICalculoDadosCadastroProximaContaService _calculoDadosCadastroProximaContaService;
         private readonly IValidator<ContaPessoaFisicaCadastroDto> _validator;
+        private readonly IPasswordEncoder _passwordEncoder;
 
         private ContaPessoaFisicaCadastroDto _request;
         private DadosCadastroProximaContaDto _dadosCadastroProximaConta;
@@ -35,7 +37,8 @@ namespace Business.Services.Contas
             ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService,
             IValidator<ContaPessoaFisicaCadastroDto> validator,
             IPessoaFisicaRepository pessoaFisicaRepository,
-            IPessoaRepository pessoaRepository
+            IPessoaRepository pessoaRepository,
+            IPasswordEncoder passwordEncoder
         )
         {
             _contaRepository = contaRepository;
@@ -43,6 +46,7 @@ namespace Business.Services.Contas
             _validator = validator;
             _pessoaFisicaRepository = pessoaFisicaRepository;
             _pessoaRepository = pessoaRepository;
+            _passwordEncoder = passwordEncoder;
         }
 
         public long Cadastrar(ContaPessoaFisicaCadastroDto request)
@@ -64,6 +68,7 @@ namespace Business.Services.Contas
         {
             _request.Cpf = Regex.Replace(_request.Cpf, @"\D+", "");
             _request.Cep = Regex.Replace(_request.Cep, @"\D+", "");
+            _request.Senha = _passwordEncoder.Encode(_request.Senha);
         }
 
         private void ValidateFormat()
