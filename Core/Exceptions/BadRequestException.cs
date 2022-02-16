@@ -26,7 +26,8 @@ namespace Core.Exceptions
         public BadRequestException(Tuple<string, string> error)
         {
             _message = "Informe os dados corretamente";
-            _data = error;
+            _data = new Dictionary<string, string>();
+            _data.Add(error.Item1.ToLower(), error.Item2);
         }
 
         public override string GetMessage()
