@@ -16,6 +16,7 @@ namespace Business.Services.Contas
     {
         private readonly IContaRepository _contaRepository;
         private readonly IPessoaFisicaRepository _pessoaFisicaRepository;
+        private readonly IPessoaRepository _pessoaRepository;
         private readonly ICalculoDadosCadastroProximaContaService _calculoDadosCadastroProximaContaService;
         private readonly IValidator<ContaPessoaFisicaCadastroDto> _validator;
 
@@ -33,13 +34,15 @@ namespace Business.Services.Contas
             IContaRepository contaRepository,
             ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService,
             IValidator<ContaPessoaFisicaCadastroDto> validator,
-            IPessoaFisicaRepository pessoaFisicaRepository
+            IPessoaFisicaRepository pessoaFisicaRepository,
+            IPessoaRepository pessoaRepository
         )
         {
             _contaRepository = contaRepository;
             _calculoDadosCadastroProximaContaService = calculoDadosCadastroProximaContaService;
             _validator = validator;
             _pessoaFisicaRepository = pessoaFisicaRepository;
+            _pessoaRepository = pessoaRepository;
         }
 
         public long Cadastrar(ContaPessoaFisicaCadastroDto request)
@@ -63,12 +66,6 @@ namespace Business.Services.Contas
             _request.Cep = Regex.Replace(_request.Cep, @"\D+", "");
         }
 
-        private void Validate()
-        {
-            ValidateFormat();
-            ValidatePersistence();
-        }
-
         private void ValidateFormat()
         {
             ValidationResult validationResult = _validator.Validate(_request);
@@ -80,9 +77,23 @@ namespace Business.Services.Contas
 
         private void ValidatePersistence()
         {
+            ValidateCpf();
+            ValidateEmail();
+        }
+
+        private void ValidateCpf()
+        {
             if (_pessoaFisicaRepository.CpfJaExiste(_request.Cpf))
             {
-                throw new BadRequestException(new Tuple<string, string>("cpf", "Esse cpf já existe."));
+                throw new BadRequestException(new Tuple<string, string>("cpf", "Esse CPF já existe."));
+            }
+        }
+
+        private void ValidateEmail()
+        {
+            if (_pessoaRepository.EmailJaExiste(_request.Email))
+            {
+                throw new BadRequestException(new Tuple<string, string>("email", "Esse email já existe."));
             }
         }
 
