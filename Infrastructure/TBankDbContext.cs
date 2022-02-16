@@ -10,7 +10,6 @@ namespace Infrastructure
 {
     public partial class TBankDbContext : DbContext
     {
-        private readonly IConfiguration Configuration;
         public TBankDbContext()
         {
         }
@@ -20,6 +19,8 @@ namespace Infrastructure
         {
             Configuration = configuration;
         }
+
+        private readonly IConfiguration Configuration;
 
         public virtual DbSet<Agencia> Agencia { get; set; }
         public virtual DbSet<ContasSaldoMatView> ContasSaldoMatViews { get; set; }
@@ -381,7 +382,15 @@ namespace Infrastructure
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.FaturaId).HasColumnName("fatura_id");
+
                 entity.Property(e => e.TransacaoId).HasColumnName("transacao_id");
+
+                entity.HasOne(d => d.Fatura)
+                    .WithMany(p => p.TransacaoCreditos)
+                    .HasForeignKey(d => d.FaturaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_transacao_credito_fatura_id");
 
                 entity.HasOne(d => d.Transacao)
                     .WithMany(p => p.TransacaoCreditos)
