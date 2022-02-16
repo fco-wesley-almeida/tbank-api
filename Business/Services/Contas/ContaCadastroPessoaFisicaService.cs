@@ -5,6 +5,8 @@ using Core.Domains.Contas.Services;
 using Core.Entities;
 using Core.Exceptions;
 using Core.Repositories;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Business.Services.Contas
 {
@@ -12,6 +14,7 @@ namespace Business.Services.Contas
     {
         private readonly IContaRepository _contaRepository;
         private readonly ICalculoDadosCadastroProximaContaService _calculoDadosCadastroProximaContaService;
+        private readonly IValidator<ContaPessoaFisicaCadastroDto> _validator;
 
         private ContaPessoaFisicaCadastroDto _request;
         private DadosCadastroProximaContaDto _dadosCadastroProximaConta;
@@ -25,25 +28,36 @@ namespace Business.Services.Contas
 
         public ContaCadastroPessoaFisicaService(
             IContaRepository contaRepository,
-            ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService
+            ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService,
+            IValidator<ContaPessoaFisicaCadastroDto> validator
         )
         {
             _contaRepository = contaRepository;
             _calculoDadosCadastroProximaContaService = calculoDadosCadastroProximaContaService;
+            _validator = validator;
         }
 
         public long Cadastrar(ContaPessoaFisicaCadastroDto request)
         {
             _request = request;
+            Validate();
             MapEntities();
             _contaRepository.Create(_conta);
             if (_conta.Id == 0)
             {
-                throw new BadRequestException();
+                throw new BadRequestException("Não foi possível cadastrar sua conta.");
             }
             return _conta.Id;
         }
 
+        private void Validate()
+        {
+            ValidationResult validationResult = _validator.Validate(_request);
+            if (!validationResult.IsValid)
+            {
+                throw new BadRequestException(validationResult);
+            }
+        }
 
         private void MapEntities()
         {
