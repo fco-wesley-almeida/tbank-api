@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Core.Domains.Contas.Dtos;
 using Core.Domains.Contas.Services;
 using Core.Entities;
@@ -7,6 +8,7 @@ using Core.Exceptions;
 using Core.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
+using Infrastructure;
 
 namespace Business.Services.Contas
 {
@@ -94,7 +96,7 @@ namespace Business.Services.Contas
         {
             _pessoaFisica = new PessoaFisica();
             _pessoaFisica.Pessoa = _pessoa;
-            _pessoaFisica.Cpf = _request.Cpf;
+            _pessoaFisica.Cpf = Regex.Replace(_request.Cpf, @"\D+", "");
             _pessoaFisica.NomeCompleto = _request.NomeCompleto;
             _pessoaFisica.Rg = _request.Rg;
             return _pessoaFisica;
@@ -104,7 +106,7 @@ namespace Business.Services.Contas
         {
             _endereco = new Endereco();
             _endereco.PessoaEnderecos = new List<PessoaEndereco> {_pessoaEndereco};
-            _endereco.Cep = _request.Cep;
+            _endereco.Cep = Regex.Replace(_request.Cep, @"\D+", "");
             _endereco.Estado = _request.Estado;
             _endereco.Cidade = _request.Cidade;
             _endereco.Distrito = _request.Distrito;

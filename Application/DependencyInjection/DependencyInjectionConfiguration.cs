@@ -29,15 +29,13 @@ namespace Application.DependencyInjection
 
         private static void ConfigureRepositories(IServiceCollection services)
         {
-            // services.AddScoped<IRepository<Conta>, RepositoryBase<Conta>>();
             services.AddScoped<IContaRepository, ContaRepository>();
-            // services.AddScoped<IRepository<Agencia>, RepositoryBase<Agencia>>();
-            // services.AddScoped<IRepository<Endereco>, RepositoryBase<Endereco>>();
-            // services.AddScoped<IRepository<Pessoa>, RepositoryBase<Pessoa>>();
-            // services.AddScoped<IRepository<PessoaEndereco>, RepositoryBase<PessoaEndereco>>();
-            // services.AddScoped<IRepository<PessoaFisica>, RepositoryBase<PessoaFisica>>();
-            // services.AddScoped<IRepository<PessoaJuridica>, RepositoryBase<PessoaJuridica>>();
-            // services.AddScoped<IRepository<Usuario>, RepositoryBase<Usuario>>();
+            services.AddScoped<IAgenciaRepository, AgenciaRepository>();
+            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+            services.AddScoped<IPessoaRepository, PessoaRepository>();
+            services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
+            services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         }
     }
 }
