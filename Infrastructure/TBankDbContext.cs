@@ -48,6 +48,8 @@ namespace Infrastructure
                 entity.HasIndex(e => e.Codigo, "uk_agencia_codigo")
                     .IsUnique();
 
+                entity.Property(e => e.Digito).HasColumnName("digito");
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Codigo)
