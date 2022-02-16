@@ -26,9 +26,11 @@ namespace Application.DependencyInjection
             ConfigureRepositories(services);
             services.AddScoped<IPasswordEncoder, PasswordEncoder>();
             services.AddScoped<IContaCodigoDb, ContaCodigoDb>();
+            services.AddScoped<IContaSaldoDb, ContaSaldoDb>();
             services.AddScoped<ILoginDb, LoginDb>();
             services.AddTransient<IValidator<ContaPessoaFisicaCadastroDto>, ContaPessoaFisicaCadastroValidator>();
             services.AddTransient<IValidator<ContaPessoaJuridicaCadastroDto>, ContaPessoaJuridicaCadastroValidator>();
+            services.AddTransient<IValidator<SolicitacaoTransacaoDebitoDto>, SolicitacaoTransacaoDebitoValidator>();
             services.AddScoped<ICalculoDadosCadastroProximaContaService, CalculoDadosCadastroProximaContaService>();
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
