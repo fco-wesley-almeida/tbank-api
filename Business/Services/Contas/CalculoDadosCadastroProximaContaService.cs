@@ -10,7 +10,7 @@ namespace Business.Services.Contas
 {
     public class CalculoDadosCadastroProximaContaService: ICalculoDadosCadastroProximaContaService
     {
-        private IContaCodigoDb _contaCodigoDb;
+        private readonly IContaCodigoDb _contaCodigoDb;
         private DadosCadastroProximaContaDto _dadosCadastroProximaConta;
 
         public CalculoDadosCadastroProximaContaService(IContaCodigoDb contaCodigoDb)
@@ -46,7 +46,7 @@ namespace Business.Services.Contas
              * Fonte: http://177.153.6.25/ercompany.com.br/boleto/laravel-boleto-master/manuais/Regras%20Validacao%20Conta%20Corrente%20VI_EPS.pdf
             */
 
-            List<int> multiplicadores = new List<int> {9, 8, 7, 6, 5, 4, 3, 2, 1};
+            List<int> multiplicadores = new List<int> {9, 8, 7, 6, 5, 4, 3, 2};
             string codigo = _dadosCadastroProximaConta.ContaCodigo;
             int somaAlgarismos = multiplicadores
                 .Select((multiplicador, i) => multiplicador * codigo[i])
