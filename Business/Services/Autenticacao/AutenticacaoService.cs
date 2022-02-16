@@ -1,3 +1,4 @@
+using Core.CoreServices;
 using Core.Data;
 using Core.Domains.Autenticacao.Dtos;
 using Core.Domains.Autenticacao.Services;
@@ -10,10 +11,14 @@ namespace Business.Services.Autenticacao
         private ILoginDb _loginDb;
         private UsuarioParaAutenticarDto _usuario;
         private LoginRequestDto _request;
+        private IPasswordEncoder _passwordEncoder;
+        private IJwtTokenGenerator _jwtTokenGenerator;
 
-        public AutenticacaoService(ILoginDb loginDb)
+        public AutenticacaoService(ILoginDb loginDb, IPasswordEncoder passwordEncoder, IJwtTokenGenerator jwtTokenGenerator)
         {
             _loginDb = loginDb;
+            _passwordEncoder = passwordEncoder;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public LoginResponseDto Login(LoginRequestDto request)
@@ -23,7 +28,7 @@ namespace Business.Services.Autenticacao
             EvaluatePassword();
             return new LoginResponseDto
             {
-                Token = "token",
+                Token = GenerateToken(),
                 UserId = _usuario.UsuarioId
             };
         }
@@ -43,7 +48,12 @@ namespace Business.Services.Autenticacao
 
         private bool PasswordIsValid()
         {
-            return _usuario.Senha == _request.Senha;
+            return _usuario.Senha == _passwordEncoder.Encode(_request.Senha);
+        }
+
+        private string GenerateToken()
+        {
+            return _jwtTokenGenerator.GenerateJwtToken(_usuario.UsuarioId.ToString(), "auth");
         }
     }
 }
