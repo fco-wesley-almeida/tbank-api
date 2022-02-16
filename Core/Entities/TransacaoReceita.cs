@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Core.Entities
 {
-    public partial class TransacaoReceitum
+    public partial class TransacaoReceita
     {
         public int Id { get; set; }
         public int TransacaoId { get; set; }

@@ -1,12 +1,15 @@
 using Business.CoreServices;
 using Business.Services.Autenticacao;
 using Business.Services.Contas;
+using Business.Services.Transacoes;
 using Business.Validators;
 using Core.CoreServices;
 using Core.Data;
 using Core.Domains.Autenticacao.Services;
 using Core.Domains.Contas.Dtos;
 using Core.Domains.Contas.Services;
+using Core.Domains.Transacoes.Dtos;
+using Core.Domains.Transacoes.Services;
 using Core.Entities;
 using Core.Repositories;
 using FluentValidation;
@@ -31,6 +34,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<ISolicitacaoTransacaoDebitoService, SolicitacaoTransacaoDebitoService>();
         }
 
         private static void ConfigureRepositories(IServiceCollection services)
@@ -42,6 +46,12 @@ namespace Application.DependencyInjection
             services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
             services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IFaturaRepository, FaturaRepository>();
+            services.AddScoped<IPagamentoFaturaRepository, PagamentoFaturaRepository>();
+            services.AddScoped<ITransacaoCreditoRepository, TransacaoCreditoRepository>();
+            services.AddScoped<ITransacaoDebitoRepository, TransacaoDebitoRepository>();
+            services.AddScoped<ITransacaoReceitaRepository, TransacaoReceitaRepository>();
+            services.AddScoped<ITransacaoRepository, TransacaoRepository>();
         }
     }
 }

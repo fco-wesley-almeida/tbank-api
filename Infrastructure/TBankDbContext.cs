@@ -34,7 +34,7 @@ namespace Infrastructure
         public virtual DbSet<Transacao> Transacaos { get; set; }
         public virtual DbSet<TransacaoCredito> TransacaoCreditos { get; set; }
         public virtual DbSet<TransacaoDebito> TransacaoDebitos { get; set; }
-        public virtual DbSet<TransacaoReceitum> TransacaoReceita { get; set; }
+        public virtual DbSet<TransacaoReceita> TransacaoReceita { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -405,7 +405,7 @@ namespace Infrastructure
                     .HasConstraintName("fk_transacao_debito_transacao_id");
             });
 
-            modelBuilder.Entity<TransacaoReceitum>(entity =>
+            modelBuilder.Entity<TransacaoReceita>(entity =>
             {
                 entity.ToTable("transacao_receita");
 
