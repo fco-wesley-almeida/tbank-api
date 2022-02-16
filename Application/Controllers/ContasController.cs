@@ -17,23 +17,30 @@ namespace Application.Controllers
     {
         private readonly ILogger<ContasController> _logger;
         private readonly IContaCadastroPessoaFisicaService _cadastroPessoaFisicaService;
+        private readonly IContaCadastroPessoaJuridicaService _contaCadastroPessoaJuridicaService;
 
-        public ContasController(ILogger<ContasController> logger, IContaCadastroPessoaFisicaService cadastroPessoaFisicaService)
+        public ContasController(
+            ILogger<ContasController> logger,
+            IContaCadastroPessoaFisicaService cadastroPessoaFisicaService,
+            IContaCadastroPessoaJuridicaService contaCadastroPessoaJuridicaService
+        )
         {
             _logger = logger;
             _cadastroPessoaFisicaService = cadastroPessoaFisicaService;
+            _contaCadastroPessoaJuridicaService = contaCadastroPessoaJuridicaService;
         }
 
         [HttpPost("fisica")]
         public async Task<ActionResult<BaseResponse<long>>> CriarContaFisica(ContaPessoaFisicaCadastroDto request)
         {
-            const string message = "Seu cadastro teve êxito";
+            const string message = "Seu cadastro teve êxito.";
             return await SecureResponse(message, () => _cadastroPessoaFisicaService.Cadastrar(request));
         }
         [HttpPost("juridica")]
-        public async Task<ActionResult<string>> CriarContaJuridica()
+        public async Task<ActionResult<BaseResponse<long>>> CriarContaJuridica(ContaPessoaJuridicaCadastroDto request)
         {
-            return Ok("1");
+            const string message = "Seu cadastro teve êxito.";
+            return await SecureResponse(message, () => _contaCadastroPessoaJuridicaService.Cadastrar(request));
         }
     }
 }

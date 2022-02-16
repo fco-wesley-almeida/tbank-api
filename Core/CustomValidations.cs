@@ -38,7 +38,7 @@ namespace Core
 
         public static bool ValidateCep(string cep)
         {
-            return GetCepRegex().IsMatch(cep);
+            return cep is null || GetCepRegex().IsMatch(cep);
         }
 
         public static bool ValidateDate(string date)

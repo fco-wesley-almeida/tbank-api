@@ -25,8 +25,10 @@ namespace Application.DependencyInjection
             services.AddScoped<IContaCodigoDb, ContaCodigoDb>();
             services.AddScoped<ILoginDb, LoginDb>();
             services.AddTransient<IValidator<ContaPessoaFisicaCadastroDto>, ContaPessoaFisicaCadastroValidator>();
+            services.AddTransient<IValidator<ContaPessoaJuridicaCadastroDto>, ContaPessoaJuridicaCadastroValidator>();
             services.AddScoped<ICalculoDadosCadastroProximaContaService, CalculoDadosCadastroProximaContaService>();
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
+            services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
         }
 

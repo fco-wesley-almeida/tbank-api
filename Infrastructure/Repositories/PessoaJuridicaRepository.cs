@@ -10,5 +10,9 @@ namespace Infrastructure.Repositories
         {
         }
 
+        public bool CnpjJaExiste(string cnpj)
+        {
+            return GetDbContext().PessoaJuridicas.Any(p => p.Cnpj == cnpj);
+        }
     }
 }

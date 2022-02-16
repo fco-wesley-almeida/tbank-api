@@ -4,5 +4,6 @@ namespace Core.Repositories
 {
     public interface IPessoaJuridicaRepository: IRepository<PessoaJuridica>
     {
+        bool CnpjJaExiste(string cnpj);
     }
 }
