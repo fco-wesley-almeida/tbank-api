@@ -15,6 +15,7 @@ namespace Business.Services.Contas
     public class ContaCadastroPessoaFisicaService: IContaCadastroPessoaFisicaService
     {
         private readonly IContaRepository _contaRepository;
+        private readonly IPessoaFisicaRepository _pessoaFisicaRepository;
         private readonly ICalculoDadosCadastroProximaContaService _calculoDadosCadastroProximaContaService;
         private readonly IValidator<ContaPessoaFisicaCadastroDto> _validator;
 
@@ -31,18 +32,22 @@ namespace Business.Services.Contas
         public ContaCadastroPessoaFisicaService(
             IContaRepository contaRepository,
             ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService,
-            IValidator<ContaPessoaFisicaCadastroDto> validator
+            IValidator<ContaPessoaFisicaCadastroDto> validator,
+            IPessoaFisicaRepository pessoaFisicaRepository
         )
         {
             _contaRepository = contaRepository;
             _calculoDadosCadastroProximaContaService = calculoDadosCadastroProximaContaService;
             _validator = validator;
+            _pessoaFisicaRepository = pessoaFisicaRepository;
         }
 
         public long Cadastrar(ContaPessoaFisicaCadastroDto request)
         {
             _request = request;
-            Validate();
+            ValidateFormat();
+            FormatRequest();
+            ValidatePersistence();
             MapEntities();
             _contaRepository.Create(_conta);
             if (_conta.Id == 0)
@@ -52,12 +57,32 @@ namespace Business.Services.Contas
             return _conta.Id;
         }
 
+        private void FormatRequest()
+        {
+            _request.Cpf = Regex.Replace(_request.Cpf, @"\D+", "");
+            _request.Cep = Regex.Replace(_request.Cep, @"\D+", "");
+        }
+
         private void Validate()
+        {
+            ValidateFormat();
+            ValidatePersistence();
+        }
+
+        private void ValidateFormat()
         {
             ValidationResult validationResult = _validator.Validate(_request);
             if (!validationResult.IsValid)
             {
                 throw new BadRequestException(validationResult);
+            }
+        }
+
+        private void ValidatePersistence()
+        {
+            if (_pessoaFisicaRepository.CpfJaExiste(_request.Cpf))
+            {
+                throw new BadRequestException(new Tuple<string, string>("cpf", "Esse cpf já existe."));
             }
         }
 

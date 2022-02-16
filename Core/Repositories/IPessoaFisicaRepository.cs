@@ -2,7 +2,8 @@ using Core.Entities;
 
 namespace Core.Repositories
 {
-    public interface IPessoaJuridicaRepository: IRepository<PessoaJuridica>
+    public interface IPessoaFisicaRepository: IRepository<PessoaFisica>
     {
+        bool CpfJaExiste(string cpf);
     }
 }

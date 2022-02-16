@@ -17,6 +17,11 @@ namespace Infrastructure.Repositories
             _dbSet = _context.Set<T>();
         }
 
+        protected TBankDbContext GetDbContext()
+        {
+            return _context;
+        }
+
         public void Create(T entity)
         {
             _dbSet.Add(entity);

@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -19,6 +20,13 @@ namespace Core.Exceptions
         {
             _validationResult = validationResult;
             _message = "Informe os dados corretamente.";
+        }
+
+
+        public BadRequestException(Tuple<string, string> error)
+        {
+            _message = "Informe os dados corretamente";
+            _data = error;
         }
 
         public override string GetMessage()
