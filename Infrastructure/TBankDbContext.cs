@@ -198,9 +198,6 @@ namespace Infrastructure
                 entity.HasIndex(e => e.PessoaId, "uk_pessoa_fisica_pessoa_id")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Rg, "uk_pessoa_fisica_rg")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Cpf)
