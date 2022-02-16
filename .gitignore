@@ -2,3 +2,4 @@ Application/appsettings.*
 .idea
 */bin/*
 */obj/*
+publish/*
