@@ -46,7 +46,10 @@ namespace Core.Exceptions
             {
                 if (!errors.Keys.Contains(validationFailure.PropertyName))
                 {
-                    errors.Add(validationFailure.PropertyName.ToLower(), validationFailure.ErrorMessage);
+                    string prop = validationFailure.PropertyName;
+                    string message = validationFailure.ErrorMessage;
+                    string camelCaseProp = char.ToLower(prop[0]) + prop[1..];
+                    errors.Add(camelCaseProp, message);
                 }
             }
             return errors;
