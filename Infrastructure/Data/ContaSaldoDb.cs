@@ -50,5 +50,25 @@ namespace Infrastructure.Data
              conn.Close();
              return saldo;
         }
+
+        public float FindLimiteDisponivel(long contaId)
+        {
+            NpgsqlConnection conn;
+            float saldo;
+            const string sql = @"
+                SELECT limite_disponivel from conta where id = @ContaId
+             ";
+            conn = GetConnection();
+            try
+            {
+                saldo = conn.QueryFirst<float>(sql, new {ContaId = contaId});
+            }
+            catch (InvalidOperationException)
+            {
+                saldo = 0;
+            }
+            conn.Close();
+            return saldo;
+        }
     }
 }

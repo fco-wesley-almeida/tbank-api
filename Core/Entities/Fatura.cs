@@ -10,6 +10,7 @@ namespace Core.Entities
         public Fatura()
         {
             PagamentoFaturas = new HashSet<PagamentoFatura>();
+            TransacaoCreditos = new HashSet<TransacaoCredito>();
         }
 
         public int Id { get; set; }
@@ -21,5 +22,6 @@ namespace Core.Entities
 
         public virtual Conta Conta { get; set; }
         public virtual ICollection<PagamentoFatura> PagamentoFaturas { get; set; }
+        public virtual ICollection<TransacaoCredito> TransacaoCreditos { get; set; }
     }
 }

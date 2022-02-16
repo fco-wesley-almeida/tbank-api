@@ -32,6 +32,7 @@ namespace Application.DependencyInjection
             services.AddTransient<IValidator<ContaPessoaJuridicaCadastroDto>, ContaPessoaJuridicaCadastroValidator>();
             services.AddTransient<IValidator<SolicitacaoTransacaoDebitoDto>, SolicitacaoTransacaoDebitoValidator>();
             services.AddTransient<IValidator<SolicitacaoTransacaoReceitaDto>, SolicitacaoTransacaoReceitaValidator>();
+            services.AddTransient<IValidator<SolicitacaoTransacaoCreditoDto>, SolicitacaoTransacaoCreditoValidator>();
             services.AddScoped<ICalculoDadosCadastroProximaContaService, CalculoDadosCadastroProximaContaService>();
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
@@ -39,6 +40,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<ISolicitacaoTransacaoDebitoService, SolicitacaoTransacaoDebitoService>();
             services.AddScoped<ISolicitacaoTransacaoReceitaService, SolicitacaoTransacaoReceitaService>();
+            services.AddScoped<ISolicitacaoTransacaoCreditoService, SolicitacaoTransacaoCreditoService>();
         }
 
         private static void ConfigureRepositories(IServiceCollection services)
