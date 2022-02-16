@@ -57,7 +57,7 @@ namespace Application.Controllers
              return await SecureResponse(message, () => _solicitacaoTransacaoReceitaService.Solicitar(request));
          }
 
-          [HttpGet("{contaId}")]
+          [HttpGet("{contaId}"), Authorize]
           public async Task<ActionResult<Conta>> GetContaDetails(long contaId)
           {
              return _tbankDbContext.Conta.Find((int)contaId);
