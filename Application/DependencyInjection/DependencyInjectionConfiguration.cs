@@ -30,6 +30,7 @@ namespace Application.DependencyInjection
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         }
 
         private static void ConfigureRepositories(IServiceCollection services)
