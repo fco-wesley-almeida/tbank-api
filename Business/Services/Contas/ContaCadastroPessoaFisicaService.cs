@@ -56,7 +56,7 @@ namespace Business.Services.Contas
             _conta = new Conta();
             _conta.AgenciaId = _dadosCadastroProximaConta.AgenciaId;
             _conta.Codigo = _dadosCadastroProximaConta.ContaCodigo;
-            _conta.DataCadastro = new DateTime();
+            _conta.DataCadastro = DateTime.Now;
             _conta.Digito = _dadosCadastroProximaConta.ContaDigito;
             _conta.Pessoa = MapPessoa();
         }
