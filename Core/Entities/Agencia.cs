@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -12,6 +13,7 @@ namespace Core.Entities
         }
 
         public int Id { get; set; }
+        public int Digito { get; set; }
         public string Codigo { get; set; }
 
         public virtual ICollection<Conta> Conta { get; set; }

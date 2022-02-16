@@ -1,6 +1,8 @@
 using Application.DependencyInjection;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,7 @@ namespace Application
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Application", Version = "v1"});
             });
+            services.AddDbContext<TBankDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("TBankContext")));
             DependencyInjectionConfiguration.RegisterService(services);
         }
 

@@ -6,6 +6,6 @@ namespace Core.Domains.Contas.Services
 {
     public interface IContaCadastroPessoaFisicaService
     {
-        public Task<long> Cadastrar(ContaPessoaFisicaCadastroDto request);
+        public long Cadastrar(ContaPessoaFisicaCadastroDto request);
     }
 }

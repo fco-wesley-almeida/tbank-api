@@ -10,6 +10,7 @@ namespace Core.Entities
         public Pessoa()
         {
             Conta = new HashSet<Conta>();
+            PessoaEnderecos = new HashSet<PessoaEndereco>();
         }
 
         public int Id { get; set; }
@@ -23,5 +24,6 @@ namespace Core.Entities
         public virtual PessoaJuridica PessoaJuridica { get; set; }
         public virtual Usuario Usuario { get; set; }
         public virtual ICollection<Conta> Conta { get; set; }
+        public virtual ICollection<PessoaEndereco> PessoaEnderecos { get; set; }
     }
 }
