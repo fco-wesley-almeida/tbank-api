@@ -31,12 +31,14 @@ namespace Application.DependencyInjection
             services.AddTransient<IValidator<ContaPessoaFisicaCadastroDto>, ContaPessoaFisicaCadastroValidator>();
             services.AddTransient<IValidator<ContaPessoaJuridicaCadastroDto>, ContaPessoaJuridicaCadastroValidator>();
             services.AddTransient<IValidator<SolicitacaoTransacaoDebitoDto>, SolicitacaoTransacaoDebitoValidator>();
+            services.AddTransient<IValidator<SolicitacaoTransacaoReceitaDto>, SolicitacaoTransacaoReceitaValidator>();
             services.AddScoped<ICalculoDadosCadastroProximaContaService, CalculoDadosCadastroProximaContaService>();
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IContaCadastroPessoaJuridicaService, ContaCadastroPessoaJuridicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<ISolicitacaoTransacaoDebitoService, SolicitacaoTransacaoDebitoService>();
+            services.AddScoped<ISolicitacaoTransacaoReceitaService, SolicitacaoTransacaoReceitaService>();
         }
 
         private static void ConfigureRepositories(IServiceCollection services)
