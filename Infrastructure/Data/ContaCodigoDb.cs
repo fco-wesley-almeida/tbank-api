@@ -8,7 +8,7 @@ namespace Infrastructure.Data
 {
     public class ContaCodigoDb: DbBase, IContaCodigoDb
     {
-        protected ContaCodigoDb(IConfiguration configuration) : base(configuration)
+        public ContaCodigoDb(IConfiguration configuration) : base(configuration)
         {
         }
         public int FindLastContaCodigo()

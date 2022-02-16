@@ -15,10 +15,12 @@ namespace Application.DependencyInjection
     {
         public static void RegisterService(IServiceCollection services)
         {
+            ConfigureRepositories(services);
+            services.AddScoped<IContaCodigoDb, ContaCodigoDb>();
+            services.AddScoped<ILoginDb, LoginDb>();
+            services.AddScoped<ICalculoDadosCadastroProximaContaService, CalculoDadosCadastroProximaContaService>();
             services.AddScoped<IContaCadastroPessoaFisicaService, ContaCadastroPessoaFisicaService>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
-            services.AddScoped<ILoginDb, LoginDb>();
-            ConfigureRepositories(services);
         }
 
         private static void ConfigureRepositories(IServiceCollection services)
