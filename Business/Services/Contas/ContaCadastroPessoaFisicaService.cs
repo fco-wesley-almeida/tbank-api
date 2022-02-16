@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Core.Domains.Contas.Dtos;
 using Core.Domains.Contas.Services;
 using Core.Entities;
 using Core.Exceptions;
 using Core.Repositories;
-using Infrastructure.Repositories;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Business.Services.Contas
 {
     public class ContaCadastroPessoaFisicaService: IContaCadastroPessoaFisicaService
     {
-        private IContaRepository _contaRepository;
+        private readonly IContaRepository _contaRepository;
+        private readonly ICalculoDadosCadastroProximaContaService _calculoDadosCadastroProximaContaService;
 
         private ContaPessoaFisicaCadastroDto _request;
+        private DadosCadastroProximaContaDto _dadosCadastroProximaConta;
+
         private Conta _conta;
         private PessoaFisica _pessoaFisica;
         private Pessoa _pessoa;
@@ -23,9 +23,13 @@ namespace Business.Services.Contas
         private PessoaEndereco _pessoaEndereco;
         private Usuario _usuario;
 
-        public ContaCadastroPessoaFisicaService(IContaRepository contaRepository)
+        public ContaCadastroPessoaFisicaService(
+            IContaRepository contaRepository,
+            ICalculoDadosCadastroProximaContaService calculoDadosCadastroProximaContaService
+        )
         {
             _contaRepository = contaRepository;
+            _calculoDadosCadastroProximaContaService = calculoDadosCadastroProximaContaService;
         }
 
         public long Cadastrar(ContaPessoaFisicaCadastroDto request)
@@ -40,24 +44,20 @@ namespace Business.Services.Contas
             return _conta.Id;
         }
 
+
         private void MapEntities()
         {
+            _dadosCadastroProximaConta = _calculoDadosCadastroProximaContaService.Calcular();
             MapConta();
-            // MapEndereco();
-            // MapPessoa();
-            // MapPessoaFisica();
-            // MapEndereco();
-            // MapPessoaEndereco();
-            // MapUsuario();
         }
 
         private void MapConta()
         {
             _conta = new Conta();
-            _conta.AgenciaId = 1;
-            _conta.Codigo = "0001";
+            _conta.AgenciaId = _dadosCadastroProximaConta.AgenciaId;
+            _conta.Codigo = _dadosCadastroProximaConta.ContaCodigo;
             _conta.DataCadastro = new DateTime();
-            _conta.Digito = 1;
+            _conta.Digito = _dadosCadastroProximaConta.ContaDigito;
             _conta.Pessoa = MapPessoa();
         }
 
